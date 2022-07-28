@@ -1,0 +1,17 @@
+notests *default:
+  build:
+    target: Vostok.Metrics.AspNetCore.sln
+    configuration: NoTests
+    tool:
+      name: dotnet
+
+  install:
+    - Vostok.Metrics.AspNetCore/bin/Release/netstandard2.0/Vostok.Metrics.AspNetCore.dll
+
+  deps:
+    - vostok.devtools
+
+full-build > notests:
+  build:
+    target: Vostok.Metrics.AspNetCore.sln
+    configuration: Release

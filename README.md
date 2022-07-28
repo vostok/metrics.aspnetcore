@@ -1,6 +1,6 @@
 # Vostok.Metrics.AspNetCore
 
-[![Build status](https://ci.appveyor.com/api/projects/status/github/vostok/metrics.aspnetcore?svg=true&branch=master)](https://ci.appveyor.com/project/vostok/metrics.aspnetcore/branch/master)
+[![Build & Test & Publish](https://github.com/vostok/metrics.aspnetcore/actions/workflows/ci.yml/badge.svg)](https://github.com/vostok/metrics.aspnetcore/actions/workflows/ci.yml)
 [![NuGet](https://img.shields.io/nuget/v/Vostok.Metrics.AspNetCore.svg)](https://www.nuget.org/packages/Vostok.Metrics.AspNetCore)
 
 Metrics collection for AspNetCore applications.

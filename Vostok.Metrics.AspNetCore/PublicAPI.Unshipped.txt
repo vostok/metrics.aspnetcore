@@ -1,1 +1,45 @@
-
+override Vostok.Metrics.AspNetCore.Tls.TlsConnectionsCollector.OnEventSourceCreated(System.Diagnostics.Tracing.EventSource eventSource) -> void
+override Vostok.Metrics.AspNetCore.Tls.TlsConnectionsCollector.OnEventWritten(System.Diagnostics.Tracing.EventWrittenEventArgs eventData) -> void
+override Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor.OnEventSourceCreated(System.Diagnostics.Tracing.EventSource eventSource) -> void
+override Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor.OnEventWritten(System.Diagnostics.Tracing.EventWrittenEventArgs eventData) -> void
+static Vostok.Metrics.AspNetCore.Kestrel.KestrelMetricsCollectorExtensions_Metrics.ReportMetrics(this Vostok.Metrics.AspNetCore.Kestrel.KestrelMetricsCollector collector, Vostok.Metrics.IMetricContext metricContext, System.TimeSpan? period = null) -> System.IDisposable
+static Vostok.Metrics.AspNetCore.Tls.TlsConnectionsCollectorExtensions_Metrics.ReportMetrics(this Vostok.Metrics.AspNetCore.Tls.TlsConnectionsCollector collector, Vostok.Metrics.IMetricContext metricContext, System.TimeSpan? period = null) -> System.IDisposable
+static Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitorExtensions_Logging.LogHandshakes(this Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor monitor, Vostok.Logging.Abstractions.ILog log, System.Predicate<Vostok.Metrics.AspNetCore.Tls.TlsHandshakeInfo> filter) -> System.IDisposable
+static Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitorExtensions_Metrics.ReportMetrics(this Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor monitor, Vostok.Metrics.IMetricContext metricContext, System.TimeSpan? period = null) -> System.IDisposable
+Vostok.Metrics.AspNetCore.Kestrel.KestrelMetrics
+Vostok.Metrics.AspNetCore.Kestrel.KestrelMetrics.CurrentConnections.get -> long
+Vostok.Metrics.AspNetCore.Kestrel.KestrelMetrics.CurrentConnections.set -> void
+Vostok.Metrics.AspNetCore.Kestrel.KestrelMetrics.CurrentWebsocketRequests.get -> long
+Vostok.Metrics.AspNetCore.Kestrel.KestrelMetrics.CurrentWebsocketRequests.set -> void
+Vostok.Metrics.AspNetCore.Kestrel.KestrelMetrics.KestrelMetrics() -> void
+Vostok.Metrics.AspNetCore.Kestrel.KestrelMetricsCollector
+Vostok.Metrics.AspNetCore.Kestrel.KestrelMetricsCollector.Collect() -> Vostok.Metrics.AspNetCore.Kestrel.KestrelMetrics
+Vostok.Metrics.AspNetCore.Kestrel.KestrelMetricsCollector.Dispose() -> void
+Vostok.Metrics.AspNetCore.Kestrel.KestrelMetricsCollector.KestrelMetricsCollector() -> void
+Vostok.Metrics.AspNetCore.Kestrel.KestrelMetricsCollectorExtensions_Metrics
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls10Sessions.get -> long
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls10Sessions.set -> void
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls11Sessions.get -> long
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls11Sessions.set -> void
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls12Sessions.get -> long
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls12Sessions.set -> void
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls13Sessions.get -> long
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls13Sessions.set -> void
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.FailedTlsHandshakes.get -> long
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.FailedTlsHandshakes.set -> void
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.TlsConnectionMetrics() -> void
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionsCollector
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionsCollector.Collect() -> Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionsCollector.TlsConnectionsCollector() -> void
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionsCollectorExtensions_Metrics
+Vostok.Metrics.AspNetCore.Tls.TlsHandshakeInfo
+Vostok.Metrics.AspNetCore.Tls.TlsHandshakeInfo.Duration.get -> System.TimeSpan
+Vostok.Metrics.AspNetCore.Tls.TlsHandshakeInfo.IsFailed.get -> bool
+Vostok.Metrics.AspNetCore.Tls.TlsHandshakeInfo.Protocol.get -> System.Security.Authentication.SslProtocols
+Vostok.Metrics.AspNetCore.Tls.TlsHandshakeInfo.TlsHandshakeInfo(System.Security.Authentication.SslProtocols protocol, bool isFailed, System.TimeSpan latency) -> void
+Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor
+Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor.Subscribe(System.IObserver<Vostok.Metrics.AspNetCore.Tls.TlsHandshakeInfo> observer) -> System.IDisposable
+Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor.TlsHandshakeMonitor() -> void
+Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitorExtensions_Logging
+Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitorExtensions_Metrics

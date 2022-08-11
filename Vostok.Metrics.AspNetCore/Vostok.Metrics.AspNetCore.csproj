@@ -4,7 +4,6 @@
   <Import Project="..\..\vostok.devtools\git-commit-to-assembly-title\Vostok.Tools.GitCommit2AssemblyTitle.props" />
   <PropertyGroup>
     <Configurations>Debug;Release</Configurations>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <PropertyGroup>
     <VersionPrefix>0.0.1</VersionPrefix>
@@ -32,10 +31,6 @@
     <Reference Include="Vostok.Logging.Abstractions">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\vostok.logging.abstractions\Vostok.Logging.Abstractions\bin\Release\$(ReferencesFramework)\Vostok.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Vostok.Commons.Time">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\vostok.commons.time\Vostok.Commons.Time\bin\Release\$(ReferencesFramework)\Vostok.Commons.Time.dll</HintPath>
     </Reference>
     <Reference Include="Vostok.Metrics">
       <SpecificVersion>False</SpecificVersion>

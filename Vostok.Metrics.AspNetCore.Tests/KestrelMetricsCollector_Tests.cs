@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Net.Sockets;
+using System.Net;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,10 +22,9 @@ internal class KestrelMetricsCollector_Tests : TestsBase
     [Test]
     public void Should_measure_current_connections()
     {
-        var port = GetPort();
         using var collector = new KestrelMetricsCollector();
-        using var server = StartServer(builder => SetupServer(builder, port));
-        using var client = new TcpClient("localhost", port);
+        using var server = StartServer(SetupServer);
+        using var client = GetTcpClient(server.Endpoint.Host, server.Endpoint.Port);
 
         var assertion = () =>
         {
@@ -39,11 +38,9 @@ internal class KestrelMetricsCollector_Tests : TestsBase
     [Test]
     public async Task Should_measure_websocket_connections()
     {
-        var port = GetPort();
         using var collector = new KestrelMetricsCollector();
         using var server = StartServer(
-            builder =>
-                SetupServer(builder, port),
+            SetupServer,
             builder =>
             {
                 builder.UseWebSockets();
@@ -56,7 +53,7 @@ internal class KestrelMetricsCollector_Tests : TestsBase
         );
         using var client = new ClientWebSocket();
 
-        await client.ConnectAsync(new Uri($"ws://localhost:{port}"), CancellationToken.None);
+        await client.ConnectAsync(new Uri($"ws://{server.Endpoint.Host}:{server.Endpoint.Port}"), CancellationToken.None);
 
         var assertion = () =>
         {
@@ -67,11 +64,11 @@ internal class KestrelMetricsCollector_Tests : TestsBase
         assertion.ShouldPassIn(10.Seconds());
     }
 
-    private static void SetupServer(WebHostBuilder builder, int port)
+    private static void SetupServer(WebHostBuilder builder)
     {
         builder.ConfigureKestrel(options =>
         {
-            options.ListenLocalhost(port);
+            options.Listen(IPAddress.Loopback, 0);
         });
     }
 }

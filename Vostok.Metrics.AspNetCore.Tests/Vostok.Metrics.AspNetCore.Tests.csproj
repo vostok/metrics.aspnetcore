@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\vostok.commons.testing\Vostok.Commons.Testing\AssertionAssertions.cs" Link="Commons\AssertionAssertions.cs" />
+    <Compile Include="..\..\vostok.commons.local\Vostok.Commons.Local\Helpers\Retrier.cs" Link="Commons\Retrier.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vostok.Metrics.AspNetCore\Vostok.Metrics.AspNetCore.csproj" />

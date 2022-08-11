@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
+using System.Net;
 using System.Net.Security;
-using System.Net.Sockets;
-using System.Security.Authentication;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Extensions;
@@ -21,45 +19,52 @@ namespace Vostok.Metrics.AspNetCore.Tests;
 internal class TlsHandshakeMonitor_Tests : TestsBase, IObserver<TlsHandshakeInfo>
 {
     private List<TlsHandshakeInfo> handshakes;
-    private bool allowServerCertificate;
 
+    private ServerInfo server;
+
+    private string host;
     private int port;
-    private IDisposable serverToken;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        port = GetPort();
-        serverToken = StartServer(builder =>
+        server = StartServer(builder =>
             builder.ConfigureKestrel(options =>
                 {
                     options.ConfigureHttpsDefaults(adapterOptions => adapterOptions.AllowAnyClientCertificate());
-                    options.ListenLocalhost(port, listenOptions => listenOptions.UseHttps());
+                    options.Listen(IPAddress.Loopback, 0, listenOptions => listenOptions.UseHttps());
                 }
             ));
+
+        host = server.Endpoint.Host;
+        port = server.Endpoint.Port;
     }
 
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        serverToken?.Dispose();
+        server?.Dispose();
     }
 
     [SetUp]
     public void Setup()
     {
         handshakes = new List<TlsHandshakeInfo>();
-        allowServerCertificate = true;
     }
 
     [Test]
     public async Task Should_measure_handshakes()
     {
         using var monitor = new TlsHandshakeMonitor();
-        using var client = GetClient();
+        using var client = GetTcpClient(host, port);
 
         monitor.Subscribe(this);
-        using var response = await client.GetAsync($"https://localhost:{port}");
+        await using var sslStream = new SslStream(client.GetStream());
+        await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
+        {
+            TargetHost = host,
+            RemoteCertificateValidationCallback = (_, _, _, _) => true
+        });
 
         Action assertion = () => handshakes.Should().NotBeEmpty();
 
@@ -69,14 +74,18 @@ internal class TlsHandshakeMonitor_Tests : TestsBase, IObserver<TlsHandshakeInfo
     [Test]
     public async Task Should_measure_failed_handshakes()
     {
-        allowServerCertificate = false;
         using var monitor = new TlsHandshakeMonitor();
-        using var client = GetClient();
+        using var client = GetTcpClient(host, port);
 
         monitor.Subscribe(this);
+        await using var sslStream = new SslStream(client.GetStream());
         try
         {
-            using var response = await client.GetAsync($"https://localhost:{port}");
+            await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
+            {
+                TargetHost = host,
+                RemoteCertificateValidationCallback = (_, _, _, _) => false
+            });
         }
         catch
         {
@@ -85,7 +94,7 @@ internal class TlsHandshakeMonitor_Tests : TestsBase, IObserver<TlsHandshakeInfo
 
         Action assertion = () => handshakes.Should().NotBeEmpty();
 
-        assertion.ShouldPassIn(500.Milliseconds());
+        assertion.ShouldPassIn(1.Seconds());
         handshakes.Any(handshake => handshake.IsFailed).Should().BeTrue();
     }
 
@@ -93,14 +102,14 @@ internal class TlsHandshakeMonitor_Tests : TestsBase, IObserver<TlsHandshakeInfo
     public async Task Should_measure_handshakes_duration()
     {
         using var monitor = new TlsHandshakeMonitor();
-        using var client = new TcpClient("localhost", port);
+        using var client = GetTcpClient(host, port);
 
         monitor.Subscribe(this);
         await using var sslStream = new SslStream(client.GetStream());
         var watch = Stopwatch.StartNew();
         await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
         {
-            TargetHost = "localhost",
+            TargetHost = host,
             RemoteCertificateValidationCallback = (_, _, _, _) => true
         });
         watch.Stop();
@@ -111,17 +120,6 @@ internal class TlsHandshakeMonitor_Tests : TestsBase, IObserver<TlsHandshakeInfo
 
         var duration = handshakes.First().Duration;
         Math.Abs(watch.ElapsedMilliseconds - duration.TotalMilliseconds).Should().BeLessThan(50);
-    }
-
-    private HttpClient GetClient()
-    {
-        var handler = new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = (_, _, _, _) => allowServerCertificate,
-            SslProtocols = SslProtocols.Tls12
-        };
-
-        return new HttpClient(handler);
     }
 
     public void OnNext(TlsHandshakeInfo value) =>

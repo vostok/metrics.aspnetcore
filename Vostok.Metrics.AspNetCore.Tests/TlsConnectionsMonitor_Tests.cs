@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Net;
 using System.Net.Security;
-using System.Net.Sockets;
-using System.Security.Authentication;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Extensions;
@@ -18,40 +17,44 @@ namespace Vostok.Metrics.AspNetCore.Tests;
 [TestFixture]
 internal class TlsConnectionsMonitor_Tests : TestsBase
 {
+    private ServerInfo server;
+
+    private string host;
     private int port;
-    private IDisposable serverToken;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        port = GetPort();
-        serverToken = StartServer(builder =>
+        server = StartServer(builder =>
             builder.ConfigureKestrel(options =>
                 {
                     options.ConfigureHttpsDefaults(adapterOptions => adapterOptions.AllowAnyClientCertificate());
-                    options.ListenLocalhost(port, listenOptions => listenOptions.UseHttps());
+                    options.Listen(IPAddress.Loopback, 0, listenOptions => listenOptions.UseHttps());
                 }
             ));
+
+        host = server.Endpoint.Host;
+        port = server.Endpoint.Port;
     }
 
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        serverToken?.Dispose();
+        server?.Dispose();
     }
 
     [Test]
     public async Task Should_measure_failed_tls_handshakes()
     {
         using var collector = new TlsConnectionsCollector();
-        using var client = new TcpClient("localhost", port);
+        using var client = GetTcpClient(host, port);
 
         await using var sslStream = new SslStream(client.GetStream());
         try
         {
             await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
             {
-                TargetHost = "localhost",
+                TargetHost = host,
                 RemoteCertificateValidationCallback = (_, _, _, _) => false
             });
         }
@@ -69,33 +72,27 @@ internal class TlsConnectionsMonitor_Tests : TestsBase
         assertion.ShouldPassIn(10.Seconds());
     }
 
-    [TestCaseSource(nameof(tlsVersions))]
-    public async Task Should_measure_current_tls_connections(Func<TlsConnectionMetrics, long> valueProvider, SslProtocols protocols)
+    [Test]
+    public async Task Should_measure_current_tls_connections()
     {
         using var collector = new TlsConnectionsCollector();
-        using var client = new TcpClient("localhost", port);
+        using var client = GetTcpClient(host, port);
 
         await using var sslStream = new SslStream(client.GetStream());
         await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
         {
-            TargetHost = "localhost",
-            RemoteCertificateValidationCallback = (_, _, _, _) => true,
-            EnabledSslProtocols = protocols
+            TargetHost = host,
+            RemoteCertificateValidationCallback = (_, _, _, _) => true
         });
 
         var assertion = () =>
         {
             var metrics = collector.Collect();
-            valueProvider(metrics).Should().BePositive();
+            Math.Max(metrics.CurrentTls10Sessions + metrics.CurrentTls11Sessions + metrics.CurrentTls12Sessions + metrics.CurrentTls13Sessions, 0)
+                .Should()
+                .BePositive();
         };
 
         assertion.ShouldPassIn(10.Seconds());
     }
-
-    private static object[] tlsVersions =
-    {
-        new object[] {new Func<TlsConnectionMetrics, long>(metrics => metrics.CurrentTls10Sessions), SslProtocols.Tls},
-        new object[] {new Func<TlsConnectionMetrics, long>(metrics => metrics.CurrentTls11Sessions), SslProtocols.Tls11},
-        new object[] {new Func<TlsConnectionMetrics, long>(metrics => metrics.CurrentTls12Sessions), SslProtocols.Tls12}
-    };
 }

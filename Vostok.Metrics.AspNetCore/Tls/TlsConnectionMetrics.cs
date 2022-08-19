@@ -9,6 +9,12 @@ namespace Vostok.Metrics.AspNetCore.Tls;
 public class TlsConnectionMetrics
 {
     /// <summary>
+    /// <para>The number of active TLS sessions of any version.</para>
+    /// <para>This metric is collected only for net5.0 and newer, zero for other platforms.</para>
+    /// </summary>
+    public long CurrentTlsSessions { get; set; }
+    
+    /// <summary>
     /// <para>The number of active TLS 1.0 sessions.</para>
     /// <para>This metric is collected only for net5.0 and newer, zero for other platforms.</para>
     /// </summary>

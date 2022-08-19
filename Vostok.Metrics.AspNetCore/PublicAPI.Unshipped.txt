@@ -4,7 +4,7 @@ override Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor.OnEventSourceCreated(
 override Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor.OnEventWritten(System.Diagnostics.Tracing.EventWrittenEventArgs eventData) -> void
 static Vostok.Metrics.AspNetCore.Kestrel.KestrelMetricsCollectorExtensions_Metrics.ReportMetrics(this Vostok.Metrics.AspNetCore.Kestrel.KestrelMetricsCollector collector, Vostok.Metrics.IMetricContext metricContext, System.TimeSpan? period = null) -> System.IDisposable
 static Vostok.Metrics.AspNetCore.Tls.TlsConnectionsCollectorExtensions_Metrics.ReportMetrics(this Vostok.Metrics.AspNetCore.Tls.TlsConnectionsCollector collector, Vostok.Metrics.IMetricContext metricContext, System.TimeSpan? period = null) -> System.IDisposable
-static Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitorExtensions_Logging.LogHandshakes(this Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor monitor, Vostok.Logging.Abstractions.ILog log, System.Predicate<Vostok.Metrics.AspNetCore.Tls.TlsHandshakeInfo> filter) -> System.IDisposable
+static Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitorExtensions_Logging.LogHandshakes(this Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor monitor, Vostok.Logging.Abstractions.ILog log, System.Predicate<Vostok.Metrics.AspNetCore.Tls.TlsHandshakeInfo> filter = null) -> System.IDisposable
 static Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitorExtensions_Metrics.ReportMetrics(this Vostok.Metrics.AspNetCore.Tls.TlsHandshakeMonitor monitor, Vostok.Metrics.IMetricContext metricContext, System.TimeSpan? period = null) -> System.IDisposable
 Vostok.Metrics.AspNetCore.Kestrel.KestrelMetrics
 Vostok.Metrics.AspNetCore.Kestrel.KestrelMetrics.CurrentConnections.get -> long
@@ -26,6 +26,8 @@ Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls12Sessions.get -> l
 Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls12Sessions.set -> void
 Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls13Sessions.get -> long
 Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTls13Sessions.set -> void
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTlsSessions.get -> long
+Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.CurrentTlsSessions.set -> void
 Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.FailedTlsHandshakes.get -> long
 Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.FailedTlsHandshakes.set -> void
 Vostok.Metrics.AspNetCore.Tls.TlsConnectionMetrics.TlsConnectionMetrics() -> void

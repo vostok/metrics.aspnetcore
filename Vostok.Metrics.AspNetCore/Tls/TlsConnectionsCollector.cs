@@ -29,6 +29,7 @@ public class TlsConnectionsCollector : EventListener
     private const string Tls12OpenedSessionsCounterName = "tls12-sessions-open";
     private const string Tls13OpenedSessionsCounterName = "tls13-sessions-open";
 
+    private const string AllOpenedTlsSessionsCounterName = "all-tls-sessions-open";
     private const string FailedTlsSessionsCounterName = "failed-tls-handshakes";
 
     #endregion
@@ -40,6 +41,7 @@ public class TlsConnectionsCollector : EventListener
     private long tls12OpenedSessions;
     private long tls13OpenedSessions;
 
+    private long allOpenedTlsSessions;
     private long failedTlsSessions;
 
     public TlsConnectionsCollector()
@@ -67,6 +69,7 @@ public class TlsConnectionsCollector : EventListener
         metrics.CurrentTls12Sessions = tls12OpenedSessions;
         metrics.CurrentTls13Sessions = tls13OpenedSessions;
 
+        metrics.CurrentTlsSessions = allOpenedTlsSessions;
         metrics.FailedTlsHandshakes = failedTlsSessionsCounter.Collect();
     }
 
@@ -101,6 +104,8 @@ public class TlsConnectionsCollector : EventListener
         if (EventHelper.TryGetCounterValue(eventData, Tls13OpenedSessionsCounterName, out value))
             Interlocked.Exchange(ref tls13OpenedSessions, value);
 
+        if (EventHelper.TryGetCounterValue(eventData, AllOpenedTlsSessionsCounterName, out value))
+            Interlocked.Exchange(ref allOpenedTlsSessions, value);
         if (EventHelper.TryGetCounterValue(eventData, FailedTlsSessionsCounterName, out value))
             Interlocked.Exchange(ref failedTlsSessions, value);
     }

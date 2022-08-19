@@ -13,7 +13,6 @@ notests *default:
     - vostok.metrics
     - vostok.commons.time/src
     - vostok.logging.abstractions
-    - vostok.metrics.system
     - vostok.commons.environment/src
     - vostok.commons.collections/src
     - vostok.devtools

@@ -88,6 +88,7 @@ internal class TlsConnectionsMonitor_Tests : TestsBase
         var assertion = () =>
         {
             var metrics = collector.Collect();
+            metrics.CurrentTlsSessions.Should().BePositive();
             Math.Max(metrics.CurrentTls10Sessions + metrics.CurrentTls11Sessions + metrics.CurrentTls12Sessions + metrics.CurrentTls13Sessions, 0)
                 .Should()
                 .BePositive();

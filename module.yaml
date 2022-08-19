@@ -9,7 +9,7 @@ notests *default:
     - Vostok.Metrics.AspNetCore/bin/Release/netstandard2.0/Vostok.Metrics.AspNetCore.dll
 
   deps:
-    - vostok.commons.helpers/src
+    - vostok.commons.helpers@events-helpers/src
     - vostok.metrics
     - vostok.commons.time/src
     - vostok.logging.abstractions

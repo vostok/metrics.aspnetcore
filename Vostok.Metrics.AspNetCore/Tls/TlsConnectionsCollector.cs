@@ -3,8 +3,8 @@ using System.Diagnostics.Tracing;
 using System.Threading;
 using JetBrains.Annotations;
 using Vostok.Commons.Environment;
-using Vostok.Metrics.AspNetCore.Helpers;
-using Vostok.Metrics.System.Helpers;
+using Vostok.Commons.Helpers.Counters;
+using Vostok.Commons.Helpers.Diagnostics;
 
 namespace Vostok.Metrics.AspNetCore.Tls;
 

@@ -31,7 +31,6 @@ internal class TlsHandshakeMonitor_Tests : TestsBase, IObserver<TlsHandshakeInfo
         server = StartServer(builder =>
             builder.ConfigureKestrel(options =>
                 {
-                    options.ConfigureHttpsDefaults(adapterOptions => adapterOptions.AllowAnyClientCertificate());
                     options.Listen(IPAddress.Loopback, 0, listenOptions => listenOptions.UseHttps());
                 }
             ));

@@ -13,7 +13,7 @@ public static class TlsHandshakeMonitorExtensions_Logging
     /// <para>Dispose of the returned <see cref="IDisposable"/> object to stop the logging.</para>
     /// </summary>I
     [NotNull]
-    public static IDisposable LogHandshakes([NotNull] this TlsHandshakeMonitor monitor, [NotNull] ILog log, [CanBeNull] Predicate<TlsHandshakeInfo> filter)
+    public static IDisposable LogHandshakes([NotNull] this TlsHandshakeMonitor monitor, [NotNull] ILog log, [CanBeNull] Predicate<TlsHandshakeInfo> filter = null)
         => monitor.Subscribe(new LoggingObserver(log, filter));
 
     private class LoggingObserver : IObserver<TlsHandshakeInfo>

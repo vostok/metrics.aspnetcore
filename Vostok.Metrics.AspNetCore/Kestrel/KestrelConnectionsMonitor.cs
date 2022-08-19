@@ -2,7 +2,7 @@
 using System.Diagnostics.Tracing;
 using System.Threading;
 using Vostok.Commons.Environment;
-using Vostok.Metrics.AspNetCore.Helpers;
+using Vostok.Commons.Helpers.Diagnostics;
 
 namespace Vostok.Metrics.AspNetCore.Kestrel;
 

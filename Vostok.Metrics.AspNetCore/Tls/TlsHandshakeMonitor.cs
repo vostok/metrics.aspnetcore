@@ -4,8 +4,8 @@ using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Vostok.Commons.Helpers.Diagnostics;
 using Vostok.Commons.Helpers.Observable;
-using Vostok.Metrics.AspNetCore.Helpers;
 
 namespace Vostok.Metrics.AspNetCore.Tls;
 

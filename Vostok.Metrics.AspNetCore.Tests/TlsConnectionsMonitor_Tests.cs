@@ -28,7 +28,6 @@ internal class TlsConnectionsMonitor_Tests : TestsBase
         server = StartServer(builder =>
             builder.ConfigureKestrel(options =>
                 {
-                    options.ConfigureHttpsDefaults(adapterOptions => adapterOptions.AllowAnyClientCertificate());
                     options.Listen(IPAddress.Loopback, 0, listenOptions => listenOptions.UseHttps());
                 }
             ));

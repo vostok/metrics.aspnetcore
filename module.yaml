@@ -9,9 +9,21 @@ notests *default:
     - Vostok.Metrics.AspNetCore/bin/Release/netstandard2.0/Vostok.Metrics.AspNetCore.dll
 
   deps:
+    - vostok.commons.helpers/src
+    - vostok.metrics
+    - vostok.commons.time/src
+    - vostok.logging.abstractions
+    - vostok.commons.environment/src
+    - vostok.commons.collections/src
     - vostok.devtools
 
 full-build > notests:
   build:
     target: Vostok.Metrics.AspNetCore.sln
     configuration: Release
+    
+  deps:
+    - -vostok.devtools
+    - vostok.devtools@with-net6.0
+    - vostok.commons.testing
+    - vostok.commons.local/notests

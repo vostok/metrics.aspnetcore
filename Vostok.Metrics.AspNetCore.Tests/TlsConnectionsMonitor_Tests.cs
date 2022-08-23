@@ -88,6 +88,8 @@ internal class TlsConnectionsMonitor_Tests : TestsBase
         {
             var metrics = collector.Collect();
             metrics.CurrentTlsSessions.Should().BePositive();
+            
+            // NOTE: We don't want to specify the tls version exactly as some test agents may not support certain versions.
             Math.Max(metrics.CurrentTls10Sessions + metrics.CurrentTls11Sessions + metrics.CurrentTls12Sessions + metrics.CurrentTls13Sessions, 0)
                 .Should()
                 .BePositive();

@@ -67,7 +67,7 @@ internal class TlsHandshakeMonitor_Tests : TestsBase, IObserver<TlsHandshakeInfo
 
         Action assertion = () => handshakes.Should().NotBeEmpty();
 
-        assertion.ShouldPassIn(500.Milliseconds());
+        assertion.ShouldPassIn(5.Seconds());
     }
 
     [Test]
@@ -93,7 +93,7 @@ internal class TlsHandshakeMonitor_Tests : TestsBase, IObserver<TlsHandshakeInfo
 
         Action assertion = () => handshakes.Should().NotBeEmpty();
 
-        assertion.ShouldPassIn(1.Seconds());
+        assertion.ShouldPassIn(5.Seconds());
         handshakes.Any(handshake => handshake.IsFailed).Should().BeTrue();
     }
 
@@ -115,7 +115,7 @@ internal class TlsHandshakeMonitor_Tests : TestsBase, IObserver<TlsHandshakeInfo
 
         Action assertion = () => handshakes.Should().NotBeEmpty();
 
-        assertion.ShouldPassIn(500.Milliseconds());
+        assertion.ShouldPassIn(5.Seconds());
 
         var duration = handshakes.First().Duration;
         Math.Abs(watch.ElapsedMilliseconds - duration.TotalMilliseconds).Should().BeLessThan(50);

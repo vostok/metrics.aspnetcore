@@ -7,6 +7,16 @@ notests *default:
 
   install:
     - Vostok.Metrics.AspNetCore/bin/Release/netstandard2.0/Vostok.Metrics.AspNetCore.dll
+    - groups:
+        - target-framework: "netstandard2.0"
+          libraries:
+            - Vostok.Metrics.AspNetCore/bin/Release/netstandard2.0/Vostok.Metrics.AspNetCore.dll
+        - target-framework: "net6.0"
+          libraries:
+            - Vostok.Metrics.AspNetCore/bin/Release/net6.0/Vostok.Metrics.AspNetCore.dll
+        - target-framework: "net8.0"
+          libraries:
+            - Vostok.Metrics.AspNetCore/bin/Release/net8.0/Vostok.Metrics.AspNetCore.dll
 
   deps:
     - vostok.commons.helpers/src
@@ -21,9 +31,24 @@ full-build > notests:
   build:
     target: Vostok.Metrics.AspNetCore.sln
     configuration: Release
-    
+    tool:
+      name: dotnet
+
   deps:
     - -vostok.devtools
     - vostok.devtools@with-net6.0
     - vostok.commons.testing
     - vostok.commons.local/notests
+
+  install:
+    - Vostok.Metrics.AspNetCore/bin/Release/netstandard2.0/Vostok.Metrics.AspNetCore.dll
+    - groups:
+        - target-framework: "netstandard2.0"
+          libraries:
+            - Vostok.Metrics.AspNetCore/bin/Release/netstandard2.0/Vostok.Metrics.AspNetCore.dll
+        - target-framework: "net6.0"
+          libraries:
+            - Vostok.Metrics.AspNetCore/bin/Release/net6.0/Vostok.Metrics.AspNetCore.dll
+        - target-framework: "net8.0"
+          libraries:
+            - Vostok.Metrics.AspNetCore/bin/Release/net8.0/Vostok.Metrics.AspNetCore.dll
